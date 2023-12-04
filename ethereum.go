@@ -154,33 +154,21 @@ func (c *Client) SendRawTransaction(tx Transaction) (string, error) {
 		ChainID:  c.chainID,
 	}
 
-	// if tx.GasFeeCap > 0 || tx.GasTipCap > 0 {
-	// 	fmt.Println("Transaction is dynamic fee")
-	// 	t.Type = ethgo.TransactionDynamicFee
-	// 	t.GasPrice = 0
-	// 	t.MaxFeePerGas = big.NewInt(0).SetUint64(tx.GasFeeCap)
-	// 	t.MaxPriorityFeePerGas = big.NewInt(0).SetUint64(tx.GasTipCap)
-	// }
+	if tx.GasFeeCap > 0 || tx.GasTipCap > 0 {
+		t.Type = ethgo.TransactionDynamicFee
+		t.GasPrice = 0
+		t.MaxFeePerGas = big.NewInt(0).SetUint64(tx.GasFeeCap)
+		t.MaxPriorityFeePerGas = big.NewInt(0).SetUint64(tx.GasTipCap)
+	}
 
 	s := wallet.NewEIP155Signer(t.ChainID.Uint64())
-	
-	fmt.Println("Transaction before sign: ", t)
-	fmt.Println("Gas: ", t.Gas)
-	fmt.Println("GasPrice: ", t.GasPrice)
-	fmt.Println("Nonce: ", t.Nonce)
-	fmt.Println("From: ", c.w.Address())
-	fmt.Println("Wallet: ", c.w)
 
 	st, err := s.SignTx(t, c.w)
-	fmt.Println("Transaction after sign: ", st)
 	if err != nil {
 		return "", err
 	}
 
 	trlp, err := st.MarshalRLPTo(nil)
-	fmt.Println("Transaction after marshal: ", trlp)
-	hexData := "0x" + hex.EncodeToString(trlp)
-	fmt.Println("Transaction after hex encode: ", hexData)
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal tx: %e", err)
 	}
