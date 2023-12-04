@@ -38,16 +38,19 @@ func (w *Wallet) GenerateKey() (*Key, error) {
 	}, err
 }
 
-func (*Wallet) NewWalletKeyFromPrivateKey(privateKey string) (*wallet.Key, error) {
+func (w *Wallet) NewWalletKeyFromPrivateKey(privateKey string) (*Key, error) {
 	pk, err := hex.DecodeString(privateKey)
 	if err != nil {
 		return nil, err
 	}
 
-	w, err = wallet.NewWalletFromPrivateKey(pk)
+	wa, err = wallet.NewWalletFromPrivateKey(pk)
 	if err != nil {
 		return nil, err
 	}
-	
-	return w.Key, err
+
+	return &Key{
+		PrivateKey: wa.Key.priv,
+		Address:    wa.Key.addr,
+	}, err
 }
