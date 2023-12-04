@@ -339,21 +339,28 @@ func (c *Client) pollForBlocks() {
 	now := time.Now()
 
 	for range time.Tick(500 * time.Millisecond) {
+		fmt.Println("polling for blocks")
 		blockNumber, err := c.BlockNumber()
 		if err != nil {
+			fmt.Println("error getting blockNumber")
 			panic(err)
 		}
 
+		fmt.Println("blockNumber", blockNumber)
+		fmt.Println("lastBlockNumber", lastBlockNumber)
 		if blockNumber > lastBlockNumber {
 			// compute precise block time
 			blockTime := time.Since(now)
 			now = time.Now()
 
+			fmt.Println("getting block by number")
 			block, err := c.GetBlockByNumber(ethgo.BlockNumber(blockNumber), false)
 			if err != nil {
 				panic(err)
+				fmt.Println("error getting block by number")
 			}
 			if block == nil {
+				fmt.Println("block is nil")
 				// We're not going to continue past this point if we don't have a block
 				continue
 			}
@@ -372,12 +379,16 @@ func (c *Client) pollForBlocks() {
 			prevBlock = block
 
 			rootTS := metrics.NewRegistry().RootTagSet()
+			fmt.Println("Client VU: ", c.vu)
+			fmt.Println("Metrics RootTagSet: ", rootTS)
+			fmt.Println("Client VU State: ", c.vu.State())
+			fmt.Println("Block: ", block)
 			if c.vu != nil || c.vu.State() != nil || rootTS != nil {
 				if _, loaded := blocks.LoadOrStore(c.opts.URL+strconv.FormatUint(blockNumber, 10), true); loaded {
 					// We already have a block number for this client, so we can skip this
 					continue
 				}
-
+				fmt.Println("Pushing metrics")
 				metrics.PushIfNotDone(c.vu.Context(), c.vu.State().Samples, metrics.ConnectedSamples{
 					Samples: []metrics.Sample{
 						{
