@@ -379,13 +379,14 @@ func (c *Client) pollForBlocks() {
 			prevBlock = block
 
 			rootTS := metrics.NewRegistry().RootTagSet()
-			if c.vu != nil || c.vu.State() != nil || rootTS != nil {
+			if c.vu != nil && c.vu.State() != nil && rootTS != nil {
 				if _, loaded := blocks.LoadOrStore(c.opts.URL+strconv.FormatUint(blockNumber, 10), true); loaded {
 					// We already have a block number for this client, so we can skip this
 					continue
 				}
 				fmt.Println("Client VU: ", c.vu)
 				fmt.Println("Metrics RootTagSet: ", rootTS)
+				fmt.Println("Client VU State Samples: ", c.vu.State())
 				fmt.Println("Client VU State Samples: ", c.vu.State().Samples)
 				fmt.Println("Block: ", block)
 				fmt.Println("Block Transaction hashes: ", block.TransactionsHashes)
