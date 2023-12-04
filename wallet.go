@@ -38,8 +38,8 @@ func (w *Wallet) GenerateKey() (*Key, error) {
 	}, err
 }
 
-func (w *Wallet) NewWalletKeyFromPrivateKey(privateKey []bytes) (*Key, error) {
-	wa, err = wallet.NewWalletFromPrivateKey(pk)
+func (w *Wallet) NewWalletKeyFromPrivateKey(privateKey []byte) (*Key, error) {
+	wa, err := wallet.NewWalletFromPrivateKey(pk)
 	if err != nil {
 		return nil, err
 	}
