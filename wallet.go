@@ -39,7 +39,7 @@ func (w *Wallet) GenerateKey() (*Key, error) {
 }
 
 func (w *Wallet) NewWalletKeyFromPrivateKey(privateKey []byte) (*Key, error) {
-	wa, err := wallet.NewWalletFromPrivateKey(privateKey)
+	wa, err := wallet.NewWalletFromPrivKey(privateKey)
 	if err != nil {
 		return nil, err
 	}
