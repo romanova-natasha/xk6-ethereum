@@ -162,7 +162,14 @@ func (c *Client) SendRawTransaction(tx Transaction) (string, error) {
 	}
 
 	s := wallet.NewEIP155Signer(t.ChainID.Uint64())
+	
 	fmt.Println("Transaction before sign: ", t)
+	fmt.Println("GasPrice: ", t.GasPrice)
+	fmt.Println("Gas: ", t.Gas)
+	fmt.Println("Nonce: ", t.Nonce)
+	fmt.Println("From: ", c.w.Address())
+	fmt.Println("Wallet: ", c.w)
+
 	st, err := s.SignTx(t, c.w)
 	fmt.Println("Transaction after sign: ", st)
 	if err != nil {
