@@ -171,6 +171,8 @@ func (c *Client) SendRawTransaction(tx Transaction) (string, error) {
 
 	trlp, err := st.MarshalRLPTo(nil)
 	fmt.Println("Transaction after marshal: ", trlp)
+	hexData := "0x" + hex.EncodeToString(data)
+	fmt.Println("Transaction after hex encode: ", hexData)
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal tx: %e", err)
 	}
