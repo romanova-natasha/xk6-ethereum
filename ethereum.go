@@ -162,12 +162,15 @@ func (c *Client) SendRawTransaction(tx Transaction) (string, error) {
 	}
 
 	s := wallet.NewEIP155Signer(t.ChainID.Uint64())
+	fmt.Println("Transaction before sign: ", t)
 	st, err := s.SignTx(t, c.w)
+	fmt.Println("Transaction after sign: ", st)
 	if err != nil {
 		return "", err
 	}
 
 	trlp, err := st.MarshalRLPTo(nil)
+	fmt.Println("Transaction after marshal: ", trlp)
 	if err != nil {
 		return "", fmt.Errorf("failed to marshal tx: %e", err)
 	}
