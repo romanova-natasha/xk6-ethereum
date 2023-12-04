@@ -154,19 +154,19 @@ func (c *Client) SendRawTransaction(tx Transaction) (string, error) {
 		ChainID:  c.chainID,
 	}
 
-	if tx.GasFeeCap > 0 || tx.GasTipCap > 0 {
-		fmt.Println("Transaction is dynamic fee")
-		t.Type = ethgo.TransactionDynamicFee
-		t.GasPrice = 0
-		t.MaxFeePerGas = big.NewInt(0).SetUint64(tx.GasFeeCap)
-		t.MaxPriorityFeePerGas = big.NewInt(0).SetUint64(tx.GasTipCap)
-	}
+	// if tx.GasFeeCap > 0 || tx.GasTipCap > 0 {
+	// 	fmt.Println("Transaction is dynamic fee")
+	// 	t.Type = ethgo.TransactionDynamicFee
+	// 	t.GasPrice = 0
+	// 	t.MaxFeePerGas = big.NewInt(0).SetUint64(tx.GasFeeCap)
+	// 	t.MaxPriorityFeePerGas = big.NewInt(0).SetUint64(tx.GasTipCap)
+	// }
 
 	s := wallet.NewEIP155Signer(t.ChainID.Uint64())
 	
 	fmt.Println("Transaction before sign: ", t)
-	fmt.Println("GasPrice: ", t.GasPrice)
 	fmt.Println("Gas: ", t.Gas)
+	fmt.Println("GasPrice: ", t.GasPrice)
 	fmt.Println("Nonce: ", t.Nonce)
 	fmt.Println("From: ", c.w.Address())
 	fmt.Println("Wallet: ", c.w)
