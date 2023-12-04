@@ -44,8 +44,14 @@ func (w *Wallet) NewWalletKeyFromPrivateKey(privateKey []byte) (*Key, error) {
 		return nil, err
 	}
 
+	pk, err := wa.MarshallPrivateKey()
+	if err != nil {
+		return nil, err
+	}
+	pks := hex.EncodeToString(pk)
+
 	return &Key{
-		PrivateKey: wa.Key.priv,
-		Address:    wa.Key.addr,
+		PrivateKey: pks,
+		Address:    wa.Address().String(),
 	}, err
 }
