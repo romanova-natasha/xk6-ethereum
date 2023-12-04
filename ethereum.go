@@ -379,15 +379,22 @@ func (c *Client) pollForBlocks() {
 			prevBlock = block
 
 			rootTS := metrics.NewRegistry().RootTagSet()
-			fmt.Println("Client VU: ", c.vu)
-			fmt.Println("Metrics RootTagSet: ", rootTS)
-			fmt.Println("Client VU State: ", c.vu.State())
-			fmt.Println("Block: ", block)
 			if c.vu != nil || c.vu.State() != nil || rootTS != nil {
 				if _, loaded := blocks.LoadOrStore(c.opts.URL+strconv.FormatUint(blockNumber, 10), true); loaded {
 					// We already have a block number for this client, so we can skip this
 					continue
 				}
+				fmt.Println("Client VU: ", c.vu)
+				fmt.Println("Metrics RootTagSet: ", rootTS)
+				fmt.Println("Client VU State Samples: ", c.vu.State().Samples)
+				fmt.Println("Block: ", block)
+				fmt.Println("Block Transaction hashes: ", block.TransactionsHashes)
+				fmt.Println("Block GasUsed: ", block.GasUsed)
+				fmt.Println("Block GasLimit: ", block.GasLimit)
+				fmt.Println("BlockNumber: ", blockNumber)
+				fmt.Println("Metrics block: ", c.metrics.Block)
+				fmt.Println("Metrics gas_used: ", c.metrics.GasUsed)
+				fmt.Println("Metrics tps: ", c.metrics.TPS)
 				fmt.Println("Pushing metrics")
 				metrics.PushIfNotDone(c.vu.Context(), c.vu.State().Samples, metrics.ConnectedSamples{
 					Samples: []metrics.Sample{
