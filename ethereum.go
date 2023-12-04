@@ -155,6 +155,7 @@ func (c *Client) SendRawTransaction(tx Transaction) (string, error) {
 	}
 
 	if tx.GasFeeCap > 0 || tx.GasTipCap > 0 {
+		fmt.Println("Transaction is dynamic fee")
 		t.Type = ethgo.TransactionDynamicFee
 		t.GasPrice = 0
 		t.MaxFeePerGas = big.NewInt(0).SetUint64(tx.GasFeeCap)
