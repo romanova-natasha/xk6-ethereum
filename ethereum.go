@@ -136,6 +136,7 @@ func (c *Client) SendTransaction(tx Transaction) (string, error) {
 // SendRawTransaction signs and sends transaction to the network.
 func (c *Client) SendRawTransaction(tx Transaction) (string, error) {
 	to := ethgo.HexToAddress(tx.To)
+	from := ethgo.HexToAddress(tx.From)
 
 	gas, err := c.EstimateGas(tx)
 	if err != nil {
@@ -144,7 +145,7 @@ func (c *Client) SendRawTransaction(tx Transaction) (string, error) {
 
 	t := &ethgo.Transaction{
 		Type:     ethgo.TransactionLegacy,
-		From:     c.w.Address(),
+		From:     &from,
 		To:       &to,
 		Value:    big.NewInt(tx.Value),
 		Gas:      gas,
