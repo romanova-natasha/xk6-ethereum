@@ -86,7 +86,7 @@ func (c *Client) EstimateGas(tx Transaction) (uint64, error) {
 	to := ethgo.HexToAddress(tx.To)
 
 	msg := &ethgo.CallMsg{
-		From:     c.w.Address(),
+		From:     ethgo.HexToAddress(tx.From),
 		To:       &to,
 		Value:    big.NewInt(tx.Value),
 		Data:     tx.Input,
