@@ -342,7 +342,8 @@ func (c *Client) pollForBlocks() {
 	for range time.Tick(500 * time.Millisecond) {
 		blockNumber, err := c.BlockNumber()
 		if err != nil {
-			panic(err)
+			fmt.Println("failed to get block number: ", err)
+			continue
 		}
 
 		if blockNumber > lastBlockNumber {
@@ -352,7 +353,8 @@ func (c *Client) pollForBlocks() {
 
 			block, err := c.GetBlockByNumber(ethgo.BlockNumber(blockNumber), false)
 			if err != nil {
-				panic(err)
+				fmt.Println("failed to get block: ", err)
+				continue
 			}
 			if block == nil {
 				// We're not going to continue past this point if we don't have a block
