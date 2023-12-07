@@ -117,7 +117,7 @@ func (mi *ModuleInstance) NewClient(call goja.ConstructorCall) *goja.Object {
 		opts:    opts,
 	}
 
-	go client.pollForBlocks()
+	// go client.pollForBlocks()
 
 	return rt.ToValue(client).ToObject(rt)
 }
